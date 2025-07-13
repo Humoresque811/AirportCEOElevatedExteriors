@@ -10,10 +10,13 @@ namespace AirportCEOElevatedExteriors;
 internal static class AirportCEOElevatedExteriorsConfig
 {
     internal static ConfigEntry<bool> CinematicMode { get; private set; }
+    internal static ConfigEntry<bool> AutomaticallyTurnModOn { get; private set; }
 
     internal static void SetUpConfig()
     {
         CinematicMode = AirportCEOElevatedExteriors.ConfigReference.Bind("General", "Cinematic Mode", false, "Forces camera to be on floor 3 when following a vehicle, or when the floor " +
             "is changed with most methods besides PGUP and PGDOWN. Most useful for filming stuff");
+        AutomaticallyTurnModOn = AirportCEOElevatedExteriors.ConfigReference.Bind("General", "Automatically Turn Mod On", true, "Automatically turn on (enable) the ACEO mod portion" +
+            " of this mod so it works properly. You should not have to touch this setting.");
     }
 }
