@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using AirportCEOModLoader.Core;
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -135,16 +136,10 @@ internal class FloorPatches
         if (__instance.Floor >= 1)
         {
             __instance.transform.position = new Vector3(__instance.transform.localPosition.x, __instance.transform.localPosition.y, FloorManager.TERMINAL_FLOOR_SHIFT);
-            //__instance.transform.GetChild(0).position = new Vector3(__instance.transform.localPosition.x, __instance.transform.localPosition.y, FloorManager.TERMINAL_FLOOR_SHIFT);
-            //__instance.transform.GetChild(1).position = new Vector3(__instance.transform.localPosition.x, __instance.transform.localPosition.y, FloorManager.TERMINAL_FLOOR_SHIFT);
-            //__instance.transform.GetChild(2).position = new Vector3(__instance.transform.localPosition.x, __instance.transform.localPosition.y, FloorManager.TERMINAL_FLOOR_SHIFT);
         }
         else
         {
             __instance.transform.position = new Vector3(__instance.transform.localPosition.x, __instance.transform.localPosition.y, -0.03f);
-            //__instance.transform.GetChild(0).position = new Vector3(__instance.transform.localPosition.x, __instance.transform.localPosition.y, -0.01f);
-            //__instance.transform.GetChild(1).position = new Vector3(__instance.transform.localPosition.x, __instance.transform.localPosition.y, -0.01f);
-            //__instance.transform.GetChild(2).position = new Vector3(__instance.transform.localPosition.x, __instance.transform.localPosition.y, -0.01f);
         }
     }
 
@@ -159,7 +154,7 @@ internal class FloorPatches
             return;
         }
 
-        if (floor >= 1)
+        if (__instance.Floor >= 1)
         {
             __instance.transform.position = new Vector3(__instance.transform.localPosition.x, __instance.transform.localPosition.y, FloorManager.TERMINAL_FLOOR_SHIFT);
         }
@@ -187,11 +182,60 @@ internal class FloorPatches
 		return;
     }
 
+
+    [HarmonyPatch(typeof(PersonController), nameof(PersonController.ShouldShowOnFloor))]
+    [HarmonyPostfix]
+    internal static void PersonShouldShowOnFloor(PersonController __instance, int floor, ref bool __result)
+    {
+        try
+        {
+            if (!SaveLoadGameDataController.loadComplete)
+            {
+                return;
+            }
+            if (__result == false || FloorManager.currentFloor < 0 || __instance.isInside)
+            {
+                return;
+            }
+
+            __result = FloorManager.currentFloor >= __instance.Floor;
+        }
+        catch (Exception ex)
+        {
+            AirportCEOElevatedExteriors.EELogger.LogError($"Failed to update persons ShouldShow func. {ExceptionUtils.ProccessException(ex)}");
+        }
+    }
+
+
+    [HarmonyPatch(typeof(AssetController), nameof(AssetController.ShouldShowOnFloor))]
+    [HarmonyPostfix]
+    internal static void BagShouldShowOnFloor(AssetController __instance, int floor, ref bool __result)
+    {
+        try
+        {
+            if (!SaveLoadGameDataController.loadComplete)
+            {
+                return;
+            }
+            if (__result == false || FloorManager.currentFloor < 0 || __instance.AssetModel.isInside)
+            {
+                return;
+            }
+
+            __result = FloorManager.currentFloor >= __instance.Floor;
+        }
+        catch (Exception ex)
+        {
+            AirportCEOElevatedExteriors.EELogger.LogError($"Failed to update assets ShouldShow func. {ExceptionUtils.ProccessException(ex)}");
+        }
+    }
+
+
     [HarmonyPatch(typeof(FloorManager), nameof(FloorManager.SetFloor))]
     [HarmonyPrefix]
-    internal static bool Tester(FloorManager __instance, int floor)
+    internal static bool CinematicSwitchTo3rdFloor(FloorManager __instance, int floor)
     {
-        if (floor == 3)
+        if (!AirportCEOElevatedExteriorsConfig.CinematicMode.Value || floor == 3)
         {
             return true;
         }

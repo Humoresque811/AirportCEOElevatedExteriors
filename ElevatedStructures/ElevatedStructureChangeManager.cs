@@ -25,13 +25,14 @@ internal class ElevatedStructureChangeManager
 
     static Sprite[] cutUpSprites;
     internal static Dictionary<Enums.BuilderPieceType, Sprite> cutUpSpritesByType = new Dictionary<Enums.BuilderPieceType, Sprite>();
-    internal static void PrepareTextures(SaveLoadGameDataController _)
-    {
-        spriteSheet = LoadTexture("C:/My Stuff/ACEO Texture Work/Airport CEO Textures/ReRoad/Elevated Exteriors/spriteSheet.png");
 
-        tunnelEnd = LoadTexture("C:/My Stuff/ACEO Texture Work/Airport CEO Textures/ReRoad/Elevated Exteriors/tunnel.png");
+    internal static void PrepareTextures(string basepath)
+    {
+        spriteSheet = LoadTexture(Path.Combine(basepath, "spriteSheet.png"));
+
+        tunnelEnd = LoadTexture(Path.Combine(basepath, "tunnel.png"));
         tunnelSpriteEnd = Sprite.Create(tunnelEnd, new Rect(0f, 0f, tunnelEnd.width, tunnelEnd.height), Vector2.one / 2f, 256, 0u, SpriteMeshType.FullRect);
-        tunnelFull = LoadTexture("C:/My Stuff/ACEO Texture Work/Airport CEO Textures/ReRoad/Elevated Exteriors/tunnelFull.png");
+        tunnelFull = LoadTexture(Path.Combine(basepath, "tunnelFull.png"));
         tunnelSpriteFull = Sprite.Create(tunnelFull, new Rect(0f, 0f, tunnelFull.width, tunnelFull.height), Vector2.one / 2f, 256, 0u, SpriteMeshType.FullRect);
 
         CutSprites(spriteSheet);

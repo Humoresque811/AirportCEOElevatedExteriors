@@ -19,6 +19,13 @@ internal class TexturePatches
     [HarmonyPostfix]
     internal static void RoadPreserveLayerPatch(PlaceableObject __instance)
     {
+        PlaceableItem pli = __instance as PlaceableItem;
+
+        if (pli != null && !pli.isInside && pli.Floor > 0)
+        {
+            pli.overlay.transform.position = new Vector3(pli.overlay.transform.position.x, pli.overlay.transform.position.y, pli.Position.z);
+        }
+
         if (__instance is not PlaceableRoad || __instance.shadows == null || __instance.shadows.Length == 0)
         {
             return;
@@ -88,12 +95,7 @@ internal class TexturePatches
     {
         RoadTunnelLogicManager.UpdateTextureOnRoadTunnel(__instance);
     }
-    //[HarmonyPatch(typeof(RoadTunnel), nameof(RoadTunnel.Awake))]
-    //[HarmonyPostfix]
-    //internal static void RoadTunnelPatch2(RoadTunnel __instance)
-    //{
-    //    RoadTunnelLogicManager.UpdateTextureOnRoadTunnel(__instance);
-    //}
+
     [HarmonyPatch(typeof(RoadTunnel), nameof(RoadTunnel.ToggleSprite))]
     [HarmonyPostfix]
     internal static void RoadTunnelPatch3(RoadTunnel __instance)

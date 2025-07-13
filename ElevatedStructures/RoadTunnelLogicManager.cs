@@ -65,6 +65,16 @@ internal static class RoadTunnelLogicManager
         roadTunnel.tunnel.transform.parent.transform.position = new Vector3(roadTunnel.transform.position.x, roadTunnel.transform.position.y, zOffset);
         roadTunnel.tunnel.transform.localPosition = new Vector3(roadTunnel.tunnel.transform.localPosition.x, roadTunnel.tunnel.transform.localPosition.y, -0.0001f);
 
+        Transform overlay = roadTunnel.transform.Find("Overlay");
+        if (overlay == null)
+        {
+            AirportCEOElevatedExteriors.EELogger.LogError($"Failed to find overlay of a road tunnel (just skipped that part of the code)");
+        }
+        else
+        {
+            overlay.position = new Vector3(overlay.position.x, overlay.position.y, FloorManager.TERMINAL_FLOOR_SHIFT);
+        }
+
         if (!needsRotation)
         {
             return;

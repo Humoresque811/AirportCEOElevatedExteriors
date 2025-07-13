@@ -37,9 +37,8 @@ public class AirportCEOElevatedExteriors : BaseUnityPlugin
 
     private void Start()
     {
-        //AirportCEOModLoader.WorkshopUtils.WorkshopUtils.Register("RoadSprites", );
+        AirportCEOModLoader.WorkshopUtils.WorkshopUtils.Register("ElevatedExteriorSprites", ElevatedStructureChangeManager.PrepareTextures);
         AirportCEOModLoader.WatermarkUtils.WatermarkUtils.Register(new AirportCEOModLoader.WatermarkUtils.WatermarkInfo("EE", "1.0", true));
-        AirportCEOModLoader.SaveLoadUtils.EventDispatcher.NewGameStarted += ElevatedStructureChangeManager.PrepareTextures;
 
         RoadTunnelLogicManager.Awake();
     }
