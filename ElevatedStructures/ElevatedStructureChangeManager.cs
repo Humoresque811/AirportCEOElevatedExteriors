@@ -1,12 +1,11 @@
-﻿using System;
+﻿using AirportCEOElevatedExteriors.ElevatedStructures.Patches;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using static UnityEngine.ParticleSystem.PlaybackState;
-using static UnityEngine.UIElements.UIRAtlasAllocator;
 
 namespace AirportCEOElevatedExteriors.ElevatedStructures;
 
@@ -24,7 +23,14 @@ internal class ElevatedStructureChangeManager
     internal static Sprite tunnelSpriteEnd;
 
     static Sprite[] cutUpSprites;
-    internal static Dictionary<Enums.BuilderPieceType, Sprite> cutUpSpritesByType = new Dictionary<Enums.BuilderPieceType, Sprite>();
+    internal static Dictionary<Enums.BuilderPieceType, Sprite> cutUpSpritesByTypeAsphalt = new Dictionary<Enums.BuilderPieceType, Sprite>();
+    internal static Dictionary<Enums.BuilderPieceType, Sprite> cutUpSpritesByTypeConcrete = new Dictionary<Enums.BuilderPieceType, Sprite>();
+
+    internal static void AllowForTextureLoad(string basepath)
+    {
+        DelayTextureLoadPatch.workshopInfoCache = basepath;
+
+    }
 
     internal static void PrepareTextures(string basepath)
     {
@@ -37,6 +43,7 @@ internal class ElevatedStructureChangeManager
 
         CutSprites(spriteSheet);
     }
+
     private static void CutSprites(Texture2D sheet)
     {
         int rows = sheet.height / 1024;
@@ -53,22 +60,39 @@ internal class ElevatedStructureChangeManager
             }
         }
 
-        cutUpSpritesByType[Enums.BuilderPieceType.Straight] =               cutUpSprites[2];
-        cutUpSpritesByType[Enums.BuilderPieceType.Turn] =                   cutUpSprites[13];
-        cutUpSpritesByType[Enums.BuilderPieceType.TTurn] =                  cutUpSprites[9];
-        cutUpSpritesByType[Enums.BuilderPieceType.XTurn] =                  cutUpSprites[8];
-        cutUpSpritesByType[Enums.BuilderPieceType.End] =                    cutUpSprites[15];
-        cutUpSpritesByType[Enums.BuilderPieceType.DoubleEnd] =              cutUpSprites[7];
-        cutUpSpritesByType[Enums.BuilderPieceType.Corner] =                 cutUpSprites[11];
-        cutUpSpritesByType[Enums.BuilderPieceType.ThreeTurn] =              cutUpSprites[1];
-        cutUpSpritesByType[Enums.BuilderPieceType.ThreeTurnFlipped] =       cutUpSprites[3];
-        cutUpSpritesByType[Enums.BuilderPieceType.Center] =                 cutUpSprites[10];
-        cutUpSpritesByType[Enums.BuilderPieceType.SingleToNormal] =         cutUpSprites[4];
-        cutUpSpritesByType[Enums.BuilderPieceType.SingleToNormalFlipped] =  cutUpSprites[5];
-        cutUpSpritesByType[Enums.BuilderPieceType.SingleTurn] =             cutUpSprites[0];
-        cutUpSpritesByType[Enums.BuilderPieceType.SingleStraight] =         cutUpSprites[14];
-        cutUpSpritesByType[Enums.BuilderPieceType.SingleTTurn] =            cutUpSprites[6];
-        cutUpSpritesByType[Enums.BuilderPieceType.SingleDiagonal] =         cutUpSprites[12];
+        cutUpSpritesByTypeAsphalt[Enums.BuilderPieceType.Straight] =               cutUpSprites[2];
+        cutUpSpritesByTypeAsphalt[Enums.BuilderPieceType.Turn] =                   cutUpSprites[13];
+        cutUpSpritesByTypeAsphalt[Enums.BuilderPieceType.TTurn] =                  cutUpSprites[9];
+        cutUpSpritesByTypeAsphalt[Enums.BuilderPieceType.XTurn] =                  cutUpSprites[8];
+        cutUpSpritesByTypeAsphalt[Enums.BuilderPieceType.End] =                    cutUpSprites[15];
+        cutUpSpritesByTypeAsphalt[Enums.BuilderPieceType.DoubleEnd] =              cutUpSprites[7];
+        cutUpSpritesByTypeAsphalt[Enums.BuilderPieceType.Corner] =                 cutUpSprites[11];
+        cutUpSpritesByTypeAsphalt[Enums.BuilderPieceType.ThreeTurn] =              cutUpSprites[1];
+        cutUpSpritesByTypeAsphalt[Enums.BuilderPieceType.ThreeTurnFlipped] =       cutUpSprites[3];
+        cutUpSpritesByTypeAsphalt[Enums.BuilderPieceType.Center] =                 cutUpSprites[10];
+        cutUpSpritesByTypeAsphalt[Enums.BuilderPieceType.SingleToNormal] =         cutUpSprites[4];
+        cutUpSpritesByTypeAsphalt[Enums.BuilderPieceType.SingleToNormalFlipped] =  cutUpSprites[5];
+        cutUpSpritesByTypeAsphalt[Enums.BuilderPieceType.SingleTurn] =             cutUpSprites[0];
+        cutUpSpritesByTypeAsphalt[Enums.BuilderPieceType.SingleStraight] =         cutUpSprites[14];
+        cutUpSpritesByTypeAsphalt[Enums.BuilderPieceType.SingleTTurn] =            cutUpSprites[6];
+        cutUpSpritesByTypeAsphalt[Enums.BuilderPieceType.SingleDiagonal] =         cutUpSprites[12];
+
+        cutUpSpritesByTypeConcrete[Enums.BuilderPieceType.Straight] =               cutUpSprites[16 + 2];
+        cutUpSpritesByTypeConcrete[Enums.BuilderPieceType.Turn] =                   cutUpSprites[16 + 13];
+        cutUpSpritesByTypeConcrete[Enums.BuilderPieceType.TTurn] =                  cutUpSprites[16 + 9];
+        cutUpSpritesByTypeConcrete[Enums.BuilderPieceType.XTurn] =                  cutUpSprites[16 + 8];
+        cutUpSpritesByTypeConcrete[Enums.BuilderPieceType.End] =                    cutUpSprites[16 + 15];
+        cutUpSpritesByTypeConcrete[Enums.BuilderPieceType.DoubleEnd] =              cutUpSprites[16 + 7];
+        cutUpSpritesByTypeConcrete[Enums.BuilderPieceType.Corner] =                 cutUpSprites[16 + 11];
+        cutUpSpritesByTypeConcrete[Enums.BuilderPieceType.ThreeTurn] =              cutUpSprites[16 + 1];
+        cutUpSpritesByTypeConcrete[Enums.BuilderPieceType.ThreeTurnFlipped] =       cutUpSprites[16 + 3];
+        cutUpSpritesByTypeConcrete[Enums.BuilderPieceType.Center] =                 cutUpSprites[16 + 10];
+        cutUpSpritesByTypeConcrete[Enums.BuilderPieceType.SingleToNormal] =         cutUpSprites[16 + 4];
+        cutUpSpritesByTypeConcrete[Enums.BuilderPieceType.SingleToNormalFlipped] =  cutUpSprites[16 + 5];
+        cutUpSpritesByTypeConcrete[Enums.BuilderPieceType.SingleTurn] =             cutUpSprites[16 + 0];
+        cutUpSpritesByTypeConcrete[Enums.BuilderPieceType.SingleStraight] =         cutUpSprites[16 + 14];
+        cutUpSpritesByTypeConcrete[Enums.BuilderPieceType.SingleTTurn] =            cutUpSprites[16 + 6];
+        cutUpSpritesByTypeConcrete[Enums.BuilderPieceType.SingleDiagonal] =         cutUpSprites[16 + 12];
     }
 
     private static Texture2D LoadTexture(string filePath)

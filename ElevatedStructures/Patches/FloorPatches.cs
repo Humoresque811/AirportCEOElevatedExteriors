@@ -243,4 +243,21 @@ internal class FloorPatches
         FloorManager.SetFloor(3);
         return false;
     }
+
+    [HarmonyPatch(typeof(PlaceableObject), nameof(PlaceableObject.CanClickOn))]
+    [HarmonyPostfix]
+    internal static void PreventLowerFloorClicks(PlaceableObject __instance, ref bool __result)
+    {
+        if (!__result || __instance.objectType != Enums.ObjectType.Structure)
+        {
+            return;
+        }
+
+        // its true, and this is a structure, so we might have to make a change
+        if (FloorManager.currentFloor > 0 && !__instance.isInside && __instance.Floor < FloorManager.currentFloor)
+        {
+            // we are on an upper floor
+            __result = false;
+        }
+    }
 }

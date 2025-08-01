@@ -24,16 +24,23 @@ internal class TexturePatches
         if (pli != null && !pli.isInside && pli.Floor > 0)
         {
             pli.overlay.transform.position = new Vector3(pli.overlay.transform.position.x, pli.overlay.transform.position.y, pli.Position.z);
+
+            if (pli.itemType == ItemType.Hedge)
+            {
+                pli.transform.localPosition += new Vector3(0, 0, -0.0001f);
+            }
         }
 
-        if (__instance is not PlaceableRoad || __instance.shadows == null || __instance.shadows.Length == 0)
+        if (__instance is PlaceableRoad && __instance.shadows != null && __instance.shadows.Length != 0)
         {
-            return;
+            // works
+            __instance.shadows[0].ShadowSprite.sortingLayerName = "Default";
+            __instance.shadows[0].ShadowSprite.sortingOrder = -1000;
         }
-
-        // works
-        __instance.shadows[0].ShadowSprite.sortingLayerName = "Default";
-        __instance.shadows[0].ShadowSprite.sortingOrder = -1000;
+        if (__instance is PlaceableRoad && __instance.Floor > 0)
+        {
+            __instance.transform.GetChild(1).position += new Vector3(0, 0, -0.01f); // This is the one way road icon that we are changing here!
+        }
     }
 
     [HarmonyPatch(typeof(RoadBuilder), nameof(RoadBuilder.SetBuilderPiece))]
@@ -41,14 +48,24 @@ internal class TexturePatches
     internal static void RoadTextureShadowPatch(RoadBuilder __instance, Enums.BuilderPieceType pieceType)
     {
         IRoad road = __instance.nodeAttacher.plo as IRoad;
-        if (road.RoadType != Enums.RoadType.PublicRoad || road.Foundation != Enums.FoundationType.Asphalt || __instance.nodeAttacher.Floor <= 0)
+        if (road.RoadType != Enums.RoadType.PublicRoad || __instance.nodeAttacher.Floor <= 0)
         {
             return;
         }
 
-        __instance.spriteRenderer.sprite = ElevatedStructureChangeManager.cutUpSpritesByType[pieceType];
+        Sprite spriteToUse;
+        if (road.Foundation == Enums.FoundationType.Asphalt)
+        {
+            spriteToUse = ElevatedStructureChangeManager.cutUpSpritesByTypeAsphalt[pieceType];
+            __instance.spriteRenderer.sprite = spriteToUse;
+        }
+        else
+        {
+            spriteToUse = ElevatedStructureChangeManager.cutUpSpritesByTypeConcrete[pieceType];
+            __instance.spriteRenderer.sprite = spriteToUse;
+        }
 
-        ShadowLogicManager.AddShadowToObjectIfNotAlready(__instance.nodeAttacher.plo, __instance.spriteRenderer.transform, ElevatedStructureChangeManager.cutUpSpritesByType[pieceType], __instance.nodeAttacher.Floor);
+        ShadowLogicManager.AddShadowToObjectIfNotAlready(__instance.nodeAttacher.plo, __instance.spriteRenderer.transform, spriteToUse, __instance.nodeAttacher.Floor);
     }
 
     [HarmonyPatch(typeof(PlaceableStructure), nameof(PlaceableStructure.ChangeToPlaced))]
@@ -84,7 +101,6 @@ internal class TexturePatches
             return;
         }
 
-        AirportCEOElevatedExteriors.EELogger.LogInfo($"vec size {size}");
         __instance.transform.localPosition = new Vector3(__instance.transform.localPosition.x, __instance.transform.localPosition.y, FloorManager.TERMINAL_FLOOR_SHIFT);
         ShadowLogicManager.AddShadowToTileIfNotAlready(__instance.transform, SingletonNonDestroy<DataPlaceholderMaterials>.Instance.sideWalkTile, __instance.Floor, size);
     }

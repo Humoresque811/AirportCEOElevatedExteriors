@@ -56,11 +56,6 @@ internal static class RoadTunnelLogicManager
 
     private static void AdjustPositionRotationOfTextures(RoadTunnel roadTunnel, CustomRoadTunnelTextureHandler textureHandler, bool needsRotation)
     {
-        if (textureHandler == null || textureHandler.parentTunnel == null)
-        {
-            AirportCEOElevatedExteriors.EELogger.LogError("I hate you 2");
-        }
-
         float zOffset = textureHandler.roadTunnelBottomFloor == 0 ? -0.055f : FloorManager.TERMINAL_FLOOR_SHIFT;
         roadTunnel.tunnel.transform.parent.transform.position = new Vector3(roadTunnel.transform.position.x, roadTunnel.transform.position.y, zOffset);
         roadTunnel.tunnel.transform.localPosition = new Vector3(roadTunnel.tunnel.transform.localPosition.x, roadTunnel.tunnel.transform.localPosition.y, -0.0001f);
@@ -136,8 +131,6 @@ internal static class RoadTunnelLogicManager
 
         shadowObject.position = tunnel.transform.position;
         Vector3[] customQuad = GenerateVerticies(tunnel, new Vector2(0, 0), new Vector2(0, 0));
-
-        AirportCEOElevatedExteriors.EELogger.LogInfo($"A mesh is found at {tunnel.transform.position}");
 
         Vector2[] uvs = new Vector2[4] {
             new Vector2(0, 0),

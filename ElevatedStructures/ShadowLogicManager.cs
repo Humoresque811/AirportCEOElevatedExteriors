@@ -47,7 +47,6 @@ internal static class ShadowLogicManager
         shadowObject.localPosition = new Vector3(0, 0, localz);
         shadowHandler.SetShadowHeight(localz);
         renderer.size = size;
-        AirportCEOElevatedExteriors.EELogger.LogInfo($"size once set is {renderer.size}" );
     }
 
     internal static void AddShadowToObjectIfNotAlready(PlaceableObject plo, Transform parentTransform, Sprite spriteReference, int floor)
