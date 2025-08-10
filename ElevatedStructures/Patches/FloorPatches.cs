@@ -173,7 +173,7 @@ internal class FloorPatches
     internal static void SidewalkFloorShowPatch(MergedTile __instance, int floor, ref bool __result)
     {
         ShadowLogicManager.UpdateCustomShadow(__instance, floor, __instance.Floor);
-        if (floor < 0)
+        if (floor < 0 || __instance.Floor < 0)
         {
             return;
         }
