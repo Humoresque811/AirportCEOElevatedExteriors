@@ -6,7 +6,7 @@ using HarmonyLib;
 
 namespace AirportCEOElevatedExteriors;
 
-[BepInPlugin("org.airportceoelevatedexteriors.humoresque", "AirportCEO Elevated Exteriors", PluginInfo.PLUGIN_VERSION)]
+[BepInPlugin("org.airportceoelevatedexteriors.humoresque", MODNAME, PluginInfo.PLUGIN_VERSION)]
 [BepInDependency("org.airportceomodloader.humoresque")]
 public class AirportCEOElevatedExteriors : BaseUnityPlugin
 {
@@ -15,6 +15,7 @@ public class AirportCEOElevatedExteriors : BaseUnityPlugin
     internal static ManualLogSource EELogger { get; private set; }
     internal static ConfigFile ConfigReference {  get; private set; }
 
+    internal const string MODNAME = "AirportCEO Elevated Exteriors";
 
     private void Awake()
     {
@@ -37,8 +38,8 @@ public class AirportCEOElevatedExteriors : BaseUnityPlugin
 
     private void Start()
     {
-        AirportCEOModLoader.WorkshopUtils.WorkshopUtils.Register("ElevatedExteriorSprites", ElevatedStructureChangeManager.AllowForTextureLoad);
-        AirportCEOModLoader.WatermarkUtils.WatermarkUtils.Register(new AirportCEOModLoader.WatermarkUtils.WatermarkInfo("EE", "1.0", true));
+        AirportCEOModLoader.WorkshopUtils.WorkshopUtils.Register("ElevatedExteriorSprites", ElevatedStructureChangeManager.PrepareTextures);
+        AirportCEOModLoader.WatermarkUtils.WatermarkUtils.Register(new AirportCEOModLoader.WatermarkUtils.WatermarkInfo("EE", "1.0.1", true));
 
         if (AirportCEOElevatedExteriorsConfig.AutomaticallyTurnModOn.Value)
         {

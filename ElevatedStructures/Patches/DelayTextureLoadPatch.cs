@@ -10,17 +10,17 @@ namespace AirportCEOElevatedExteriors.ElevatedStructures.Patches;
 [HarmonyPatch]
 internal class DelayTextureLoadPatch
 {
-    internal static string? workshopInfoCache = null;
+    //internal static string? workshopInfoCache = null;
 
-    [HarmonyPatch(typeof(TemplateController), nameof(TemplateController.LoadQueuedObjects), MethodType.Enumerator)]
-    [HarmonyPostfix]
-    internal static void OnEndOfModLoad(TemplateController __instance, bool __result)
-    {
-        if (__result || workshopInfoCache == null)
-        {
-            return;
-        }
+    //[HarmonyPatch(typeof(TemplateController), nameof(TemplateController.LoadQueuedObjects), MethodType.Enumerator)]
+    //[HarmonyPostfix]
+    //internal static void OnEndOfModLoad(TemplateController __instance, bool __result)
+    //{
+    //    if (__result || workshopInfoCache == null)
+    //    {
+    //        return;
+    //    }
 
-        ElevatedStructureChangeManager.PrepareTextures(workshopInfoCache);
-    }
+    //    ElevatedStructureChangeManager.PrepareTextures(workshopInfoCache);
+    //}
 }

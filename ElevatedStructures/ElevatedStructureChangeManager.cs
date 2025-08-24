@@ -1,6 +1,7 @@
 ﻿using AirportCEOElevatedExteriors.ElevatedStructures.Patches;
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -26,22 +27,31 @@ internal class ElevatedStructureChangeManager
     internal static Dictionary<Enums.BuilderPieceType, Sprite> cutUpSpritesByTypeAsphalt = new Dictionary<Enums.BuilderPieceType, Sprite>();
     internal static Dictionary<Enums.BuilderPieceType, Sprite> cutUpSpritesByTypeConcrete = new Dictionary<Enums.BuilderPieceType, Sprite>();
 
-    internal static void AllowForTextureLoad(string basepath)
-    {
-        DelayTextureLoadPatch.workshopInfoCache = basepath;
 
-    }
-
-    internal static void PrepareTextures(string basepath)
+    internal static IEnumerator PrepareTextures(string basepath)
     {
+        AirportCEOModLoader.SaveLoadUtils.CoroutineEventDispatcher.GetTextUpdater()($"{AirportCEOElevatedExteriors.MODNAME}: Loading Textures", 40);
+        yield return null;
+
         spriteSheet = LoadTexture(Path.Combine(basepath, "spriteSheet.png"));
 
+        AirportCEOModLoader.SaveLoadUtils.CoroutineEventDispatcher.GetTextUpdater()($"{AirportCEOElevatedExteriors.MODNAME}: Loading Textures", 60);
+        yield return null;
         tunnelEnd = LoadTexture(Path.Combine(basepath, "tunnel.png"));
+        yield return null;
         tunnelSpriteEnd = Sprite.Create(tunnelEnd, new Rect(0f, 0f, tunnelEnd.width, tunnelEnd.height), Vector2.one / 2f, 256, 0u, SpriteMeshType.FullRect);
+
+        AirportCEOModLoader.SaveLoadUtils.CoroutineEventDispatcher.GetTextUpdater()($"{AirportCEOElevatedExteriors.MODNAME}: Loading Textures", 80);
+        yield return null;
         tunnelFull = LoadTexture(Path.Combine(basepath, "tunnelFull.png"));
+        yield return null;
         tunnelSpriteFull = Sprite.Create(tunnelFull, new Rect(0f, 0f, tunnelFull.width, tunnelFull.height), Vector2.one / 2f, 256, 0u, SpriteMeshType.FullRect);
 
+        AirportCEOModLoader.SaveLoadUtils.CoroutineEventDispatcher.GetTextUpdater()($"{AirportCEOElevatedExteriors.MODNAME}: Finalizing Textures", 95);
+        yield return null;
         CutSprites(spriteSheet);
+        AirportCEOModLoader.SaveLoadUtils.CoroutineEventDispatcher.GetTextUpdater()($"{AirportCEOElevatedExteriors.MODNAME}: Loading Complete", 100);
+        yield return new WaitForSecondsRealtime(0.5f);
     }
 
     private static void CutSprites(Texture2D sheet)

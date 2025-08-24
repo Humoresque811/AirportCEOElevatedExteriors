@@ -118,7 +118,7 @@ internal class FloorPatches
     [HarmonyPostfix]
     internal static void VehicleFloorShowPatch(VehicleController __instance, int floor, ref bool __result)
     {
-		if (__instance.isInside || floor < 0)
+		if (__instance.isInside || floor < 0 || __instance.Floor < 0)
         {
 			__result = __instance.Floor == floor;
             return;
