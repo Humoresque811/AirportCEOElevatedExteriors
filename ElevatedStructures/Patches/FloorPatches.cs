@@ -137,7 +137,7 @@ internal class FloorPatches
         {
             __instance.transform.position = new Vector3(__instance.transform.localPosition.x, __instance.transform.localPosition.y, FloorManager.TERMINAL_FLOOR_SHIFT);
         }
-        else
+        else if (__instance.Floor == 0)
         {
             __instance.transform.position = new Vector3(__instance.transform.localPosition.x, __instance.transform.localPosition.y, -0.03f);
         }
