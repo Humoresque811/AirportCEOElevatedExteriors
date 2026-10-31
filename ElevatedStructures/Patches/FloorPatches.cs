@@ -31,15 +31,12 @@ internal class FloorPatches
         {
             if (__instance is PlaceableRoad && (__instance as PlaceableRoad).RoadType != Enums.RoadType.PublicRoad)
             {
-                __result = false;
                 return;
             }
 
             __result = true;
             return;
         }
-
-        __result = false;
     }
 
 
